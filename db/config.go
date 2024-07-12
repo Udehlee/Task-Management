@@ -30,6 +30,7 @@ func LoadConfig() (Config, error) {
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		DbName:   os.Getenv("POSTGRES_DB"),
 	}
+
 	return cfg, nil
 
 }

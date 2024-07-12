@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// ConnectDB connects to database
 func ConnectDB(config Config) (*sql.DB, error) {
 
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
@@ -23,7 +24,7 @@ func ConnectDB(config Config) (*sql.DB, error) {
 
 	err = dbConn.Ping()
 	if err != nil {
-		return nil, fmt.Errorf("error connecting to a database")
+		return nil, fmt.Errorf("connection not alive")
 
 	}
 

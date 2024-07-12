@@ -7,8 +7,7 @@ import (
 	"github.com/Udehlee/Task-Management/utils"
 )
 
-//Signup signs new user
-
+// Signup signs new user
 func (h Handler) Signup(w http.ResponseWriter, r *http.Request) {
 
 	var newUser struct {

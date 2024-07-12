@@ -7,6 +7,7 @@ import (
 	"github.com/Udehlee/Task-Management/utils"
 )
 
+// AddUserTask adds task to user
 func (h Handler) AddUserTask(w http.ResponseWriter, r *http.Request) {
 
 	var task struct {

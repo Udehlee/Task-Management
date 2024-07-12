@@ -21,9 +21,7 @@ func NewHandler(datab store.PgConn) Handler {
 }
 
 func (h Handler) Index(w http.ResponseWriter, r *http.Request) {
-	// w.Header().Set("Content-Type", "applicatin/json")
-	// w.WriteHeader(http.StatusOK)
-	// w.Write([]byte("Hello!"))
-	w.Write([]byte("Welcome to the Index page"))
+
+	w.Write([]byte("Welcome Home"))
 
 }

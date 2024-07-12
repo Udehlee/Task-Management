@@ -16,6 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}
+
 	config, err := db.LoadConfig()
 	if err != nil {
 		log.Fatal("error loading config")
@@ -26,7 +27,6 @@ func main() {
 		log.Fatal("error connecting to db")
 	}
 
-	// mux := http.NewServeMux()
 	h := handler.NewHandler(conn)
 
 	r := routes.SetupRoutes(h)

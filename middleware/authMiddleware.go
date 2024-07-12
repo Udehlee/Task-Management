@@ -13,7 +13,7 @@ import (
 // avoid context key collisions
 type contextKey string
 
-const claimsKey = contextKey("claims") //type conversion
+const claimsKey = contextKey("claims")
 
 // AuthMiddleware extracts and validates the token, then stores the claims in the context
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -50,7 +50,7 @@ func ValidateToken(tokenString string, TokenKey string) (*models.JwtClaims, erro
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(TokenKey), nil // Provide your secret key here
+		return []byte(TokenKey), nil
 	})
 
 	if err != nil {
@@ -67,6 +67,7 @@ func ValidateToken(tokenString string, TokenKey string) (*models.JwtClaims, erro
 
 // GetClaims extracts the claims from the token
 func GetClaims(token *jwt.Token) (*models.JwtClaims, error) {
+
 	claims, ok := token.Claims.(*models.JwtClaims)
 	if !ok {
 		return nil, fmt.Errorf("invalid token claims type")

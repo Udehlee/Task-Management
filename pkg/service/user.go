@@ -8,6 +8,8 @@ import (
 	"github.com/Udehlee/Task-Management/utils"
 )
 
+// CreateUser creates User details
+// saves it to the database
 func (s Service) CreateUser(firstname, lastname, email, password string) (models.User, error) {
 
 	hashedpwd, err := utils.HashPassword(password)
@@ -31,12 +33,12 @@ func (s Service) CreateUser(firstname, lastname, email, password string) (models
 
 }
 
+// CheckUser checks if users is present
 func (s Service) CheckUser(email, password string) (models.User, error) {
 
 	user, err := s.Store.UserByEmail(email)
 	if err != nil {
 		return models.User{}, fmt.Errorf("user not found")
-
 	}
 
 	err = utils.ComparePasswordHash(user.Password, password)
@@ -48,6 +50,7 @@ func (s Service) CheckUser(email, password string) (models.User, error) {
 
 }
 
+// GetAllUser retrieves all users
 func (s Service) GetAllUser() ([]models.User, error) {
 
 	users, err := s.Store.GetAllUser()
@@ -58,6 +61,7 @@ func (s Service) GetAllUser() ([]models.User, error) {
 
 }
 
+// GetUserById retrieves a single user based on id
 func (s Service) GetUserById(id int) (models.User, error) {
 	user, err := s.Store.GetUserById(id)
 	if err != nil {
