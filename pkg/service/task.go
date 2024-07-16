@@ -2,13 +2,14 @@ package service
 
 import "github.com/Udehlee/Task-Management/pkg/models"
 
-// func (s Service) AssignTask()
-func (s Service) AddTaskToUser(userID int, title, description string) error {
+//AddTaskToUser adds task specific user
+func (s Service) AddTaskToUser(userID int, title, description string, completed bool) error {
 
 	t := models.Task{
 		UserID:      userID,
 		Title:       title,
 		Description: description,
+		Completed:   completed,
 	}
 
 	if err := s.Store.InsertTask(t); err != nil {
@@ -17,11 +18,10 @@ func (s Service) AddTaskToUser(userID int, title, description string) error {
 	return nil
 }
 
-func (s Service) UpdateUserTask(userId, taskId int, title, description string, completed bool) error {
-	// return s.Store.UpdateTask(taskId, description, completed)
+//AddTaskToUser updates  specific user task
+func (s Service) UpdateUserTask(taskId int, title, description string, completed bool) error {
 
 	Update := models.Task{
-		UserID:      userId,
 		TaskID:      taskId,
 		Title:       title,
 		Description: description,

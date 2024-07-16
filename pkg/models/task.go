@@ -5,5 +5,5 @@ type Task struct {
 	UserID      int    `json:"user_id"`
 	Title       string `json:"task_title"`
 	Description string `json:"task_description"`
-	Completed   bool   `json:"done"`
+	Completed   bool   `json:"completed"`
 }

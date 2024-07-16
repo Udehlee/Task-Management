@@ -3,42 +3,45 @@ package store
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
 	"github.com/Udehlee/Task-Management/pkg/models"
 )
 
 func (p PgConn) SaveUser(user models.User) error {
 
-	userQuery := "INSERT INTO user (userId,firstname,lastname,email,password) VALUES($1,$2,$3,$4,$5) "
+	query := "INSERT INTO users (firstname, lastname, email, pass_word) VALUES ($1, $2, $3, $4) RETURNING user_id, firstname, lastname, email"
 
-	_, err := p.Conn.Exec(userQuery, user.UserID, user.FirstName, user.LastName, user.Email, user.Password)
-	if err != nil {
-		log.Fatal("error saving user to database")
+	row := p.Conn.QueryRow(query, user.FirstName, user.LastName, user.Email, user.Password)
+
+	if err := row.Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email); err != nil {
+		return fmt.Errorf("error scanning row: %w", err)
 	}
+
 	return nil
 
 }
 
 func (p PgConn) UserByEmail(email string) (models.User, error) {
 
-	CheckQuery := "SELECT userId,firstname,lastname,email,password FROM user WHERE email=$1 "
+	query := `SELECT user_id, firstname, lastname, email, pass_word FROM users WHERE email = $1`
 	var user models.User
 
-	err := p.Conn.QueryRow(CheckQuery, email).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password)
+	err := p.Conn.QueryRow(query, email).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return models.User{}, fmt.Errorf("no user found")
+			fmt.Printf("No user found for email: %s\n", email) // Logging the error
+			return models.User{}, fmt.Errorf("user not found")
 		}
-		return models.User{}, err
+		fmt.Printf("Error querying user by email: %v\n", err) // Logging the error
+		return models.User{}, fmt.Errorf("error querying user by email: %w", err)
 	}
-	return user, nil
 
+	return user, nil
 }
 
 func (p PgConn) GetAllUser() ([]models.User, error) {
 
-	query := "SELECT userId, firstname,lastname,email FROM user"
+	query := "SELECT user_id, firstname,lastname,email FROM users"
 
 	var users []models.User
 
@@ -65,13 +68,13 @@ func (p PgConn) GetAllUser() ([]models.User, error) {
 
 func (p PgConn) GetUserById(id int) (models.User, error) {
 
-	query := "SELECT userId, firstname,lastname,email FROM user WHERE id=$1"
+	query := "SELECT user_id, firstname,lastname,email FROM users WHERE user_id=$1"
 
 	var user models.User
 	err := p.Conn.QueryRow(query, id).Scan(&user.UserID, &user.FirstName, &user.LastName, &user.Email)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return models.User{}, fmt.Errorf("no user found")
+			return models.User{}, fmt.Errorf("error retrieving user")
 		}
 		return models.User{}, err
 	}
