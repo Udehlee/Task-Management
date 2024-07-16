@@ -20,7 +20,7 @@ func GenerateToken(user models.User) (string, error) {
 		LastName:  user.LastName,
 		StandardClaims: jwt.StandardClaims{
 			Subject:   strconv.Itoa(user.UserID),
-			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // Token expires in 24 hours
+			ExpiresAt: time.Now().Add(time.Hour * 10).Unix(), // Token expires in 10 hours
 			IssuedAt:  time.Now().Unix(),
 		},
 	}
@@ -28,10 +28,9 @@ func GenerateToken(user models.User) (string, error) {
 	// Create a new JWT token object using the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	// Generate the JWT token string
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
-		return "", err
+		return "Jwt creation failed", err
 	}
 
 	return tokenString, nil
