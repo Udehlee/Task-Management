@@ -1,19 +1,21 @@
-package main
+package middleware
 
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
 	"github.com/Udehlee/Task-Management/pkg/models"
+	"github.com/Udehlee/Task-Management/utils"
 	"github.com/golang-jwt/jwt/v4"
 )
 
 // avoid context key collisions
 type contextKey string
 
-const claimsKey = contextKey("claims")
+const userIDKey = contextKey("UserID")
 
 // AuthMiddleware extracts and validates the token, then stores the claims in the context
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -21,20 +23,26 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		// Extract token from request header
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
-			http.Error(w, "Authorization token is required", http.StatusUnauthorized)
+			utils.UnsucessfulRequest(w, "Unauthorized", "Authorisation token is required", http.StatusUnauthorized)
 			return
 		}
 
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
-		claims, err := ValidateToken(tokenString, "your-secret-key")
+		claims, err := ValidateToken(tokenString, "YOUR_JWT_SECRET_KEY")
 		if err != nil {
-			http.Error(w, "Invalid token: "+err.Error(), http.StatusUnauthorized)
+			utils.UnsucessfulRequest(w, "Unauthorized", "Invalid token"+err.Error(), http.StatusUnauthorized)
 			return
 		}
 
+		// Extract user ID from claims
+		userID := claims.UserID
+		if userID == 0 {
+			log.Fatal("user not found")
+		}
+
 		// Store claims in request context
-		ctx := context.WithValue(r.Context(), claimsKey, claims)
+		ctx := context.WithValue(r.Context(), userIDKey, userID)
 		r = r.WithContext(ctx)
 
 		// Proceed to the next handler
@@ -50,7 +58,7 @@ func ValidateToken(tokenString string, TokenKey string) (*models.JwtClaims, erro
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(TokenKey), nil
+		return []byte("YOUR_JWT_SECRET_KEY"), nil
 	})
 
 	if err != nil {
