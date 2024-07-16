@@ -11,10 +11,10 @@ import (
 func (h Handler) AddUserTask(w http.ResponseWriter, r *http.Request) {
 
 	var task struct {
-		UserId      int    `json:"user_Id"`
+		UserID      int    `json:"username"`
 		Title       string `json:"title"`
 		Description string `json:"description"`
-		Done        bool   `json:"bool"`
+		Completed   bool   `json:"completed"`
 	}
 
 	jd := json.NewDecoder(r.Body)
@@ -23,7 +23,7 @@ func (h Handler) AddUserTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.Service.AddTaskToUser(task.UserId, task.Title, task.Description)
+	err := h.Service.AddTaskToUser(task.UserID, task.Title, task.Description, task.Completed)
 	if err != nil {
 		utils.UnsucessfulRequest(w, "Bad Request", "failed to add task", http.StatusInternalServerError)
 		return
@@ -44,8 +44,7 @@ func (h Handler) AddUserTask(w http.ResponseWriter, r *http.Request) {
 func (h Handler) UpdateUserTask(w http.ResponseWriter, r *http.Request) {
 
 	var taskUpdate struct {
-		UserID      int    `json:"userId"`
-		TaskID      int    `json:"taskid"`
+		TaskID      int    `json:"task_id"`
 		Title       string `json:"title"`
 		Description string `json:"description"`
 		Completed   bool   `json:"completed"`
@@ -57,8 +56,7 @@ func (h Handler) UpdateUserTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Add task
-	err := h.Service.UpdateUserTask(taskUpdate.UserID, taskUpdate.TaskID, taskUpdate.Title, taskUpdate.Description, taskUpdate.Completed)
+	err := h.Service.UpdateUserTask(taskUpdate.TaskID, taskUpdate.Title, taskUpdate.Description, taskUpdate.Completed)
 	if err != nil {
 		utils.UnsucessfulRequest(w, "Bad Request", "failed to update task", http.StatusInternalServerError)
 		return

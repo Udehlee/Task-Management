@@ -35,7 +35,7 @@ func (h Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	response := map[string]interface{}{
+	loginResponse := map[string]interface{}{
 		"status":  "success",
 		"message": "Login successful",
 		"data": map[string]any{
@@ -49,5 +49,7 @@ func (h Handler) Login(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	json.NewEncoder(w).Encode(response)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(loginResponse)
 }

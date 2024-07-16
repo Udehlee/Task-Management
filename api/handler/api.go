@@ -11,11 +11,11 @@ type Handler struct {
 	Service service.Service
 }
 
-func NewHandler(datab store.PgConn) Handler {
+func NewHandler(db store.PgConn) Handler {
 
 	return Handler{
 		Service: service.Service{
-			Store: datab,
+			Store: db,
 		},
 	}
 }
@@ -23,5 +23,4 @@ func NewHandler(datab store.PgConn) Handler {
 func (h Handler) Index(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte("Welcome Home"))
-
 }

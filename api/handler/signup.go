@@ -13,7 +13,7 @@ func (h Handler) Signup(w http.ResponseWriter, r *http.Request) {
 	var newUser struct {
 		FirstName string `json:"firstname" validate:"required,alpha"`
 		LastName  string `json:"lastname" validate:"required,alpha"`
-		Email     string `json:"email" validate:"required,alpha"`
+		Email     string `json:"email" validate:"required"`
 		Password  string `json:"password" validate:"required,alpha"`
 	}
 
