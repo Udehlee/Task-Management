@@ -18,6 +18,7 @@ func GenerateToken(user models.User) (string, error) {
 		UserID:    user.UserID,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
+		Email:     user.Email,
 		StandardClaims: jwt.StandardClaims{
 			Subject:   strconv.Itoa(user.UserID),
 			ExpiresAt: time.Now().Add(time.Hour * 10).Unix(), // Token expires in 10 hours
