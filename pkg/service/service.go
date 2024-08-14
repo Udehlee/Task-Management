@@ -1,3 +1,9 @@
+package service
+
+import (
+	"github.com/Udehlee/Task-Management/pkg/models"
+)
+
 type Repo interface {
 	SaveUser(user models.User) error
 	UserByEmail(email string) (models.User, error)
