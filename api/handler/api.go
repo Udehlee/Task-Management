@@ -1,11 +1,3 @@
-package handler
-
-import (
-	"net/http"
-
-	"github.com/Udehlee/Task-Management/pkg/service"
-	"github.com/Udehlee/Task-Management/pkg/store"
-)
 
 package handler
 
@@ -30,10 +22,4 @@ func NewHandler(db store.PgConn) *Handler {
 func (h Handler) Index(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Welcome Home"))
 
-}
-
-
-func (h Handler) Index(w http.ResponseWriter, r *http.Request) {
-
-	w.Write([]byte("Welcome Home"))
 }
