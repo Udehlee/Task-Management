@@ -1,13 +1,20 @@
-package service
+type Repo interface {
+	SaveUser(user models.User) error
+	UserByEmail(email string) (models.User, error)
 
-import "github.com/Udehlee/Task-Management/pkg/store"
+	GetAllUser() ([]models.User, error)
+	GetUserById(id int) (models.User, error)
 
-type Service struct {
-	Store store.Store
+	InsertTask(task models.Task) error
+	UpdateTask(task models.Task) error
 }
 
-func NewService(db store.Store) Service {
-	return Service{
+type Service struct {
+	Store Repo
+}
+
+func NewService(db Repo) *Service {
+	return &Service{
 		Store: db,
 	}
 }
