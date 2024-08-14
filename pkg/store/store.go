@@ -2,8 +2,6 @@ package store
 
 import (
 	"database/sql"
-
-	"github.com/Udehlee/Task-Management/pkg/models"
 )
 
 
